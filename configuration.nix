@@ -89,6 +89,7 @@
     discord
     vscode
     alejandra
+    fastfetch
   ];
 
   # Enable OpenGL.
