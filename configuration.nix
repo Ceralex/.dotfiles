@@ -12,7 +12,10 @@
   ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
+  boot.loader.grub.enable = true;
+  boot.loader.grub.efiSupport = true;
+  boot.loader.grub.device = "nodev";
+
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "desktop-ale"; # Define your hostname.
