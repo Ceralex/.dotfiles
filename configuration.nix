@@ -79,6 +79,7 @@
     git
     vlc
     gnome.gnome-tweaks
+    gnome-extension-manager
     alacritty
     brave
     spotify
