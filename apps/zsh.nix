@@ -22,9 +22,9 @@
       ls = "ls --color";
       c = "clear";
 
-      hsw = "home-manager switch --flake ~/.dotfiles";
-      nsw = "sudo nixos-rebuild switch --flake ~/.dotfiles";
-      nts = "sudo nixos-rebuild test --flake ~/.dotfiles";
+      hmsw = "home-manager switch --flake ~/.dotfiles";
+      nrsw = "sudo nixos-rebuild switch --flake ~/.dotfiles";
+      nrts = "sudo nixos-rebuild test --flake ~/.dotfiles";
     };
     syntaxHighlighting.enable = true;
     enableCompletion = true;
