@@ -7,15 +7,15 @@
   ...
 }: {
   imports = [
-    # Include the results of the hardware scan.
-    ./hardware-configuration.nix
+    ./hardware-configuration.nix # Include the results of the hardware scan.
   ];
 
   # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.efiSupport = true;
-  boot.loader.grub.device = "nodev";
-
+  boot.loader.grub = {
+    enable = true;
+    efiSupport = true;
+    device = "nodev";
+  };
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "desktop-ale"; # Define your hostname.
@@ -38,16 +38,18 @@
     LC_TIME = "it_IT.UTF-8";
   };
 
-  # X11 and Gnome configuration.
+  # X11 configuration.
   services.xserver = {
     enable = true;
-    displayManager.gdm.enable = true;
-    desktopManager.gnome.enable = true;
     xkb.layout = "it";
     excludePackages = [
       pkgs.xterm
     ];
   };
+
+  # Enable GNOME desktop environment.
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome.enable = true;
 
   # Console keymap.
   console.keyMap = "it2";
@@ -120,10 +122,10 @@
       # totem # video player
     ]);
 
+  nix.settings.experimental-features = ["nix-command" "flakes"];
+
   programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
-
-  nix.settings.experimental-features = ["nix-command" "flakes"];
 
   # Stateful data version.
   system.stateVersion = "24.05"; # Did you read the comment?
