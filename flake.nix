@@ -26,7 +26,12 @@
     homeConfigurations = {
       alessandro = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        modules = [./home.nix];
+        modules = [
+          {
+            nixpkgs.config.allowUnfree = true;
+          }
+          ./home.nix
+        ];
       };
     };
   };

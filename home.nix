@@ -17,6 +17,17 @@
 
   # Install Nix packages
   home.packages = with pkgs; [
+    alacritty
+    alejandra
+    brave
+    discord
+    fastfetch
+    git
+    gnome-extension-manager
+    gnome.gnome-tweaks
+    spotify
+    vlc
+    vscode
     (nerdfonts.override {fonts = ["JetBrainsMono"];}) # Install JetBrainsMono from Nerd Fonts
   ];
 

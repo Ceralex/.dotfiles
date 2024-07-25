@@ -81,17 +81,8 @@
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
-    alacritty
-    alejandra
-    brave
-    discord
-    fastfetch
-    git
-    gnome-extension-manager
-    gnome.gnome-tweaks
-    spotify
-    vlc
-    vscode
+    # System packages
+    # vim
   ];
 
   # Enable OpenGL.
