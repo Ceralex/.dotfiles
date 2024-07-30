@@ -60,8 +60,6 @@
     vlc
     vscode
     (nerdfonts.override {fonts = ["JetBrainsMono"];}) # Install JetBrainsMono from Nerd Fonts
-
-    wezterm
   ];
 
   # Fix for https://github.com/NixOS/nixpkgs/issues/12757
