@@ -1,22 +1,65 @@
-# Edit this configuration file to define what should be installed on
-# your system. Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+# This is your system's configuration file.
+# Use this to configure your system environment (it replaces /etc/nixos/configuration.nix)
 {
+  inputs,
+  lib,
   config,
   pkgs,
   ...
 }: {
+  # You can import other NixOS modules here
   imports = [
-    ./hardware-configuration.nix # Include the results of the hardware scan.
+    # If you want to use modules from other flakes (such as nixos-hardware):
+    # inputs.hardware.nixosModules.common-cpu-amd
+    # inputs.hardware.nixosModules.common-ssd
+
+    # You can also split up your configuration and import pieces of it here:
+    # ./users.nix
+
+    # Import your generated (nixos-generate-config) hardware configuration
+    ./hardware-configuration.nix
   ];
 
-  # Bootloader.
-  boot.loader.grub = {
-    enable = true;
-    efiSupport = true;
-    device = "nodev";
+  nixpkgs = {
+    # You can add overlays here
+    overlays = [
+      # If you want to use overlays exported from other flakes:
+      # neovim-nightly-overlay.overlays.default
+
+      # Or define it inline, for example:
+      # (final: prev: {
+      #   hi = final.hello.overrideAttrs (oldAttrs: {
+      #     patches = [ ./change-hello-to-hi.patch ];
+      #   });
+      # })
+    ];
+    # Configure your nixpkgs instance
+    config = {
+      # Disable if you don't want unfree packages
+      allowUnfree = true;
+    };
   };
-  boot.loader.efi.canTouchEfiVariables = true;
+
+  nix = let
+    flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
+  in {
+    settings = {
+      # Enable flakes and new 'nix' command
+      experimental-features = "nix-command flakes";
+      # Opinionated: disable global registry
+      flake-registry = "";
+      # Workaround for https://github.com/NixOS/nix/issues/9574
+      nix-path = config.nix.nixPath;
+    };
+    # Opinionated: disable channels
+    channel.enable = false;
+
+    # Opinionated: make flake registry and nix path match flake inputs
+    registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
+    nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
+  };
+
+  # > My configuration <
 
   networking.hostName = "desktop-ale"; # Define your hostname.
   networking.networkmanager.enable = true; # Enable networking.
@@ -76,12 +119,8 @@
     extraGroups = ["networkmanager" "wheel"];
   };
 
-  # Allow unfree packages.
-  nixpkgs.config.allowUnfree = true;
-
-  # List packages installed in system profile.
+  # System packages
   environment.systemPackages = with pkgs; [
-    # System packages
     # vim
   ];
 
@@ -113,11 +152,9 @@
       # totem # video player
     ]);
 
-  nix.settings.experimental-features = ["nix-command" "flakes"];
-
   programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
 
-  # Stateful data version.
-  system.stateVersion = "24.05"; # Did you read the comment?
+  # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
+  system.stateVersion = "24.05";
 }
